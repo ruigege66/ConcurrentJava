@@ -10,7 +10,7 @@ public class UserYieldMethod implements Runnable{
 	@Override
 	public void run() {
 		System.out.println("开始一个线程"+Thread.currentThread());
-		Thread.yield();
+//		Thread.yield();
 		System.out.println("结束一个线程"+Thread.currentThread());
 		
 	}
