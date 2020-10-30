@@ -18,6 +18,7 @@ public class isInterruptedAndinterrupted {
 		System.out.println("子线程Interrupted:"+threadOne.interrupted());
 		System.out.println("主线程Interrupted:"+Thread.interrupted());
 		System.out.println("子线程isInterrupted:"+threadOne.isInterrupted());
+		
 		threadOne.join();
 	}
 }
