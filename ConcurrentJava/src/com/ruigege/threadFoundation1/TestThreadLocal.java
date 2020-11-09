@@ -67,4 +67,11 @@ public class TestThreadLocal {
 			map.remove(this);//这种特殊的map实现了map带有各种方法。
 		}
 	}
+
+	public void remove() {
+		ThreadLocalMap m = getMap(Thread.currentThread());		
+		if(m != null) {
+			m.remove(this);
+		}
+	}
 }
