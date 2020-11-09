@@ -60,4 +60,11 @@ public class TestThreadLocal {
 	protected T initialValue() {
 		return null;
 	}
+	
+		Thread t = Thread.currentThread();
+		ThreadLocalMap map = getMap(t);
+		if(map != null) {
+			map.remove(this);//这种特殊的map实现了map带有各种方法。
+		}
+	}
 }
