@@ -8,7 +8,7 @@ public class ThreadLocalExtend {
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				threadLocal.set("我是子线程的");
+				threadLocal.set0("我是子线程的");
 				System.out.println(threadLocal.get());
 			}
 		});
@@ -21,5 +21,6 @@ public class ThreadLocalExtend {
 			e.printStackTrace();
 		}
 		System.out.println(threadLocal.get());
+		
 	}	
 }
