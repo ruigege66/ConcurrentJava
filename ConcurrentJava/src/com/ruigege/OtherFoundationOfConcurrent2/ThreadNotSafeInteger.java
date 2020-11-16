@@ -12,5 +12,6 @@ public class ThreadNotSafeInteger {
 		this.value = value;
 	}
 	
+
 	
 }
