@@ -3,7 +3,6 @@ package com.ruigege.threadFoundation1;
 public class ThreadLocalMap {
 	
 	private Entry[] table;
-	private T 
 	
 	private ThreadLocalMap(ThreadLocalMap parentMap) {
 		Entry[] parentTable = parentMap.table;
