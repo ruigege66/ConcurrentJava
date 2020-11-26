@@ -1,6 +1,7 @@
 package com.ruigege.OtherFoundationOfConcurrent2;
 
-import jdk.internal.misc.Unsafe;
+//import jdk.internal.misc.Unsafe;
+import sun.misc.*;
 
 public class TestUnsafe {
 
@@ -22,7 +23,7 @@ public class TestUnsafe {
 	}
 	public static void main(String[] args) {
 		TestUnsafe testUnsafe = new TestUnsafe();
-		Boolean success = unsafe.compareAndSwapInt(testUnsafe,stateOffset,0,1);
+		boolean success = unsafe.compareAndSwapLong(testUnsafe,stateOffset,0,1);
 		System.out.println(success);
 	}
 }
