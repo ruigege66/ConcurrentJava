@@ -22,12 +22,14 @@ public class TestUnsafe2 {
 			
 		}catch(Exception e) {
 			e.printStackTrace();
+			throw new Error(e);
 		}
 	}
 	
+	
 	public static void main(String[] args) {
 		TestUnsafe2 testUnsafe2 = new TestUnsafe2();
-		boolean success = unsafe.compareAndSwapInt(this,offset,0,1);
+		boolean success = unsafe.compareAndSwapInt(testUnsafe2,offset,0,1);
 		System.out.println(success);
 	}
 }

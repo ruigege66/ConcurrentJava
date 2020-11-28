@@ -8,6 +8,8 @@ public class ThreadSafeInteger2 {
 		return value;
 	}
 
+
+
 	public void setValue(int value) {
 		this.value = value;
 	}
