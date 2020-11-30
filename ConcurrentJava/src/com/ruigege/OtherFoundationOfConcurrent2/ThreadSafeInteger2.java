@@ -5,6 +5,7 @@ public class ThreadSafeInteger2 {
 	private volatile int value;
 
 	public int getValue() {
+		
 		return value;
 	}
 
