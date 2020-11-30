@@ -10,6 +10,7 @@ public class ThreadSafeInteger2 {
 	}
 
 
+	
 
 	public void setValue(int value) {
 		this.value = value;
