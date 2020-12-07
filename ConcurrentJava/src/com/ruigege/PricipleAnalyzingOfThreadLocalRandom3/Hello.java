@@ -7,6 +7,8 @@ public class Hello {
 	
 	public synchronized void helloA() {
 		System.out.println("HelloA");
+		
+		
 	}
 	
 	public synchronized void helloB() {
