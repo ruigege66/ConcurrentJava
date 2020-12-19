@@ -70,8 +70,10 @@ public class AtomicLongTest extends Number implements java.io.Serializable{
 	}
 	
 	public final long getAndDecrement() {
-		return unsafe.getAndAddLong(this,valueOffset,-1L);
+		return unsafe.getAndA /24120ddLong(this,valueOffset,-1L);
 	}
+	
+	
 	
 	/**
 	 * 下面这个方法类似于Unsafe中的compareAndSwapLong方法
