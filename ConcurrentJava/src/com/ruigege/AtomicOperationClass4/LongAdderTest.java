@@ -1,4 +1,6 @@
 package com.ruigege.AtomicOperationClass4;
+import java.util.function.LongBinaryOperator;
+
 import sun.misc.Unsafe;
 
 @sun.misc.Contended public class LongAdderTest {
@@ -92,6 +94,65 @@ import sun.misc.Unsafe;
 	
 	final boolean casBase(long cmp,long val) {
 		return UNSAFE.compareAndSwapLong(this,BASE,cmp,val);
+	}
+	
+	final void longAccumulate(long x,LongBinaryOperator fn,boolean wasUncontended) {
+		//初始化当前线程的变量threadLocalRandomProbe的值
+		int h;
+		if(h = getProbe() == 0) {
+			ThreadLocalRandom.current();
+			h = getProbe();
+			wasUncontended = true;
+		}
+		boolean collide = false;
+		for(;;) {
+			Cell[] as;Cell a;int n;long v;
+			if((as=cells) != null && (n=as.length)>0) {
+				if((a=as[(n-1) &h]) == null) {
+					if(cellsBusy == 0) {
+						Cell r = new Cell(x);
+						if(cellsBusy == 0 && casCellsBusy()) {
+							boolean created = false;
+						}
+						try {
+							Cell[] rs;int m,j;
+							if((rs=cells) != null && (m=rs.length)>0 && rs[j = (m-1) &h] == null) {
+								rs[j] = r;
+								created = true;
+							}
+						}finally {
+							cellsBusy = 0;
+						}
+						if(created) {
+							break;
+						}
+						continue;
+					}
+				}
+				collide = false;
+			}else if(!wasUntended) {
+				wasUncontended = true;
+			}else if(a.cas(v=a.value,((fn==null)?v+x : fn.applyAsLong(v,x)))) {
+				break;
+			}else if(n >= NCPU || cells != as) {
+				collide = false;
+			}else if(!collide) {
+				collide = ture;
+			}else if(cellsBusy == 0 && casCellsBusy()) {
+				try {
+					if(cells == as) {
+						Cell[] rs = new Cell[n<<1];
+						for(int i=0;i<n;++i) {
+							rs[i] = as[i];
+						}
+						cells = rs;
+					}
+				}finally {
+					cellsBusy = 0;
+				}
+			}
+		}
+		
 	}
 	
 	
