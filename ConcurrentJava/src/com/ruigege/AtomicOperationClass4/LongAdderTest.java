@@ -57,6 +57,7 @@ import sun.misc.Unsafe;
 				if(as[i] != null) {
 					sum += as[i];
 					as[i] = 0L;
+					
 				}
 			}
 		}
