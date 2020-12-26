@@ -98,13 +98,16 @@ import sun.misc.Unsafe;
 	
 	final void longAccumulate(long x,LongBinaryOperator fn,boolean wasUncontended) {
 		//初始化当前线程的变量threadLocalRandomProbe的值
+		//代码6
 		int h;
 		if(h = getProbe() == 0) {
-			ThreadLocalRandom.current();
-			h = getProbe();
-			wasUncontended = true;
+			ThreadLocalRandom.current();//获取一个随机数的实例
+			h = getProbe();//初始化
+			//这个变量在计算当前线程应该被分配到cells数组的哪一个Cell元素的时候会用到
+			wasUncontended = true;//contend争夺，辩称
 		}
-		boolean collide = false;
+		
+		boolean collide = false;//collide冲突，碰撞
 		for(;;) {
 			Cell[] as;Cell a;int n;long v;
 			if((as=cells) != null && (n=as.length)>0) {
@@ -150,10 +153,39 @@ import sun.misc.Unsafe;
 				}finally {
 					cellsBusy = 0;
 				}
+				collide = false;
+				continue;
 			}
+			h = advanceProbe(h);
 		}
-		
+		//代码14，这里进行的是cells数组初始化
+		/**
+		 * 1.cellsBusy是一个标示，成员变量，用来实现自旋锁，状态值只有0和1，当创建Cell元素，扩容Cell数组或者
+		 * 初始化数组，使用CAS操作来保证同时只有一个线程可以进行其中之一操作
+		 * 2.为0的时候说明cells数组没有被初始化或者扩容，也没有新建Cell元素；为1说明cells数组在被初始化或者扩容，或者当前新建了Cell元素；通过CAS操作来进行0或1状态切换，这里使用了casCellBusy函数
+		 * 3.假设当前线程通过CAS设置cellsBusy为1，则当前线程开始初始化操作，那么这个时候其他线程就不能进行扩容了。
+		 */
+		else if(cellsBusy == 0 && cells == as && casCellsBusy()){
+			boolean init = false;
+			try {
+				//因为在多线程下，所以有必要再次判断一下
+				if(cells == as) {
+					//初始化数组容量为2
+					Cell[] rs = new Cell[2];
+					//h&l用来计算当前线程应该访问cell数组的哪个位置
+					//也就是使用当前线程的threadLocalRandomProbe变量值和cells数组元素个数-1做与运算
+					rs[h&l] = new Cell(x);
+					cells = rs;
+					init = true;
+				}
+			}finally {
+				cellsBusy = 0;
+			}
+			if(init) {
+				break;
+			}
+		}else if(casBase(v = base,((fn == null) ? v+x:fn.applyAsLong(v,x)))) {
+			break;
+		}
 	}
-	
-	
 }
