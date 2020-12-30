@@ -188,7 +188,8 @@ import sun.misc.Unsafe;
 				break;
 			}
 		}else if(casBase(v = base,((fn == null) ? v+x:fn.applyAsLong(v,x)))) {
-			break;
+			break; 
 		}
+		
 	}
 }
