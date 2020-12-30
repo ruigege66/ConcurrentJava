@@ -176,9 +176,12 @@ import sun.misc.Unsafe;
 					//也就是使用当前线程的threadLocalRandomProbe变量值和cells数组元素个数-1做与运算
 					rs[h&l] = new Cell(x);
 					cells = rs;
+					//标示数组已经完成初始化
 					init = true;
 				}
 			}finally {
+				//最后重置了cellBusys标记，这里没有使用CAS操作，但是却是线程安全的，因为该变量是一个
+				//volatile变量，保证了内存可见性
 				cellsBusy = 0;
 			}
 			if(init) {
