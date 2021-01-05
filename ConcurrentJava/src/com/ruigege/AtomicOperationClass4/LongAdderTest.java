@@ -111,7 +111,7 @@ import sun.misc.Unsafe;
 		for(;;) {
 			Cell[] as;Cell a;int n;long v;
 			if((as=cells) != null && (n=as.length)>0) {//当前线程调用了add方法并且根据当前线程的随机数threadLocalRandomProbe和cells元素的个数计算要访问的Cell元素下
-				//下标
+				//下标，然后如果发现对应下标元素的值为null，则新增一个cell元素到cells数组，并且在将其提娜佳到cells数组之前要竞争设置cellsBusy为1
 				if((a=as[(n-1) &h]) == null) {
 					if(cellsBusy == 0) {
 						Cell r = new Cell(x);
