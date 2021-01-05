@@ -110,7 +110,8 @@ import sun.misc.Unsafe;
 		boolean collide = false;//collide冲突，碰撞
 		for(;;) {
 			Cell[] as;Cell a;int n;long v;
-			if((as=cells) != null && (n=as.length)>0) {
+			if((as=cells) != null && (n=as.length)>0) {//当前线程调用了add方法并且根据当前线程的随机数threadLocalRandomProbe和cells元素的个数计算要访问的Cell元素下
+				//下标
 				if((a=as[(n-1) &h]) == null) {
 					if(cellsBusy == 0) {
 						Cell r = new Cell(x);
@@ -181,7 +182,8 @@ import sun.misc.Unsafe;
 				}
 			}finally {
 				//最后重置了cellBusys标记，这里没有使用CAS操作，但是却是线程安全的，因为该变量是一个
-				//volatile变量，保证了内存可见性
+				//volatile变量，保证了内存可见性，另外扩容后的cells数组里面除了包含复制过来的元素外，还包含其他元素，这些元素的值
+				//都是null，
 				cellsBusy = 0;
 			}
 			if(init) {
