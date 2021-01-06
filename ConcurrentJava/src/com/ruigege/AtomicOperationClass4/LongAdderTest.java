@@ -192,6 +192,5 @@ import sun.misc.Unsafe;
 		}else if(casBase(v = base,((fn == null) ? v+x:fn.applyAsLong(v,x)))) {
 			break; 
 		}
-		
 	}
 }
