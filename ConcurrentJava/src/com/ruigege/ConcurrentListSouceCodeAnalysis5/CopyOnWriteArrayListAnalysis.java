@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.RandomAccess;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class CopyOnWriteArrayListAnalysis<E> implements List<E>,RandomAccess, Cloneable, java.io.Serializable {
 	
@@ -41,4 +42,50 @@ public class CopyOnWriteArrayListAnalysis<E> implements List<E>,RandomAccess, Cl
     final Object[] getArray() {
         return array;
     }
+    
+    public boolean add(E element) {
+    	final ReentrantLock lock = this.lock; // 获取该实例的独占锁
+    	lock.lock();
+    	try {
+    		Object[] elements = getArray(); // 获取内部存储的数组，注意这时候还是原来的数组，
+    		// 只不过是使用一个新的引用来指向它的地址
+    		int len = elements.length; // 获取数组的长度
+    		Object[] newElements = Arrays.copyOf(elements,len+1);
+    		// 使用Arrays工具类，创建一个新的数组，将前面的元素全都复制进去，并且留出一个位置
+    		newElements[len] = element;
+    		// 使用这个新数组来代替原来的数组
+    		setArray(newElements);
+    	}finally {
+    		lock.unlock();
+    	}
+    }
+    
+    public E get(int index) {
+    	return get(getArray(),index);
+    }
+    
+    public E get(Object[] a,int index) {
+    	return (E)a[index];
+    }
+    
+    public E set(int index ,E element) {
+    	final ReentrantLock lock = this.lock;
+    	lock.lock();
+    	try {
+    		Object[] a = getArray();
+    		E oldValue = a[index];
+    		if(oldValue != element) {
+    			int len = a.length;
+    			Object[] newElements = Arrays.copyOf(a, len);
+    			newElements[index] = element;
+    			setArray(newElements);
+    		}else {
+    			setArray(a);
+    		}
+    		
+    	}finally{
+    		lock.unlock();
+    	}
+    }
+    
 }
