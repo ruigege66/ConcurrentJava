@@ -88,4 +88,53 @@ public class CopyOnWriteArrayListAnalysis<E> implements List<E>,RandomAccess, Cl
     	}
     }
     
+    public E remove(int index) {
+    	final ReentrantLock lock = this.lock;
+    	lock.lock();
+    	try {
+    		Object[] elements = getArray();
+    		int len = elements.length;
+    		int removeRemain = len - (index + 1); // 这个整数代表要迁移的剩余元素个数
+    		if(removeRemain == 0) {
+    			setArray(Arrays.copyOf(elements, len-1));//除了最后一个全部都copy过去
+    		}else {
+    			Object[] newElements = new Object[len-1];
+    			System.arraycopy(elements,0,newElements,0,index);
+    			System.arraycopy(elements,index+1,newElements,index,removeRemain);
+    			// 这里我们学习一个函数System.arraycopy
+    			// 第一个参数代表从哪里复制，第二个参数代表从第几个索引开始
+    			// 第三个参数代表复制到哪个数组中，从第几个开始，复制几个到新数组
+    			setArray(newElements);
+    		}
+    	}finally {
+    		lock.unlock();
+    	}
+    }
+    
+    public Iterator<E> iterator(){
+    	return new COWIteratro<E>(getArray(),0);
+    }
+    
+    static final class COWIterator<E> implements ListIterator<E> {
+    	// array的快照版本
+    	private final Object[] snapshot;
+    	
+    	private int cursor;
+    	
+    	private COWIterator(Object[] elements,int initialCursor) {
+    		cursor = initialCursor;
+    		snapshot = elements;
+    	}
+    	
+    	public boolean hasNext() {
+    		return cursor < snapshot.length;
+    	}
+    	
+    	public E next() {
+    		if(!hasNext()) {
+    			throw new NoSuchElementException();
+    		}
+    		return <E>snapshot[cursor++];
+    	}	
+    }    
 }
