@@ -126,6 +126,7 @@ public class CopyOnWriteArrayListAnalysis<E> implements List<E>,RandomAccess, Cl
     		snapshot = elements;
     	}
     	
+    	
     	public boolean hasNext() {
     		return cursor < snapshot.length;
     	}
