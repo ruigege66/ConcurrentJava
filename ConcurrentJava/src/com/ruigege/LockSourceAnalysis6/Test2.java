@@ -20,6 +20,7 @@ public class Test2 {
 				break;
 			default:
 				System.out.println("Ã»¼û¹ý");
+				
 		}
 	}
 }
