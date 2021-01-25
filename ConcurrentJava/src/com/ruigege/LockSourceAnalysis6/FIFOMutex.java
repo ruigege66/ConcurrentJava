@@ -30,5 +30,6 @@ public class FIFOMutex {
 	public void unlock() {
 		locked.set(false);
 		LockSupport.unpark(waiters.peek());
+		
 	}
 }
