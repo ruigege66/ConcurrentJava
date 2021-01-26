@@ -31,7 +31,5 @@ public class FIFOMutex {
 		locked.set(false);
 		LockSupport.unpark(waiters.peek());
 		
-		
-		
 	}
 }
