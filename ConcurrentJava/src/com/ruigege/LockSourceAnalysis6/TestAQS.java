@@ -7,5 +7,22 @@ public class TestAQS {
 			selfInterrupt();
 		}
 	}
+	
+	public final boolean release(int arg) {
+		if(tryRelease(arg)) {
+			Node h = head;
+			if(head != null && head.waitStatus != 0) {
+				unparkSuccessor(h);
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	public final void acquireShared(int arg) {
+		if(tryAcquireShared(arg) < 0) {
+			doAcquireShared(arg);
+		}
+	}
 
 }
