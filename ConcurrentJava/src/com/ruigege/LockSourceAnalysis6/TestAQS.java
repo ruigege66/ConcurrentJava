@@ -24,5 +24,13 @@ public class TestAQS {
 			doAcquireShared(arg);
 		}
 	}
+	
+	public final boolean releaseShared(int arg) {
+		if(tryReleaseShared(arg)) {
+			doReleaseShared();
+			return true;
+		}
+		return false;
+	}
 
 }
