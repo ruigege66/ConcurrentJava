@@ -39,6 +39,7 @@ public class CopyOnWriteArrayListAnalysis<E> implements List<E>,RandomAccess, Cl
     	}
     }
     
+    
     final Object[] getArray() {
         return array;
     }
