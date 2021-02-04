@@ -1,5 +1,7 @@
 package com.ruigege.LockSourceAnalysis6;
 
+import org.w3c.dom.Node;
+
 public class TestAQS {
 	
 	public final void acquire(int arg) {
@@ -31,6 +33,22 @@ public class TestAQS {
 			return true;
 		}
 		return false;
+	}
+	
+	private Node enq(final Node node) {
+		for(;;) {
+			Node t = tail;
+			if( t == null) {
+				if(compareAndSetHead(new Node())) {
+					tail = head;
+				}
+			}else {
+				node.prev = t;
+				if(compareAndSetTail(t,node)) {
+					t.next = node;
+				}
+			}
+		}
 	}
 
 }
