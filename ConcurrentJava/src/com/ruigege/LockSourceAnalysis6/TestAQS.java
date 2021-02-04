@@ -29,7 +29,6 @@ public class TestAQS {
 		if(tryReleaseShared(arg)) {
 			doReleaseShared();
 			return true;
-			
 		}
 		return false;
 	}
