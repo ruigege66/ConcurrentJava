@@ -45,7 +45,6 @@ public class TestReentrantLock {
 		// 释放当前线程获取到的锁
 		int savedState = fullyRelease(node);
 		int interruptMode = 0;
-		
 		// 调用park方法阻塞挂起当前线程
 		while(!isOnSyncQueue(node)) {
 			LockSupport.park(this);
