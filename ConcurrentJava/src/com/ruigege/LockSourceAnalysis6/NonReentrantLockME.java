@@ -58,6 +58,7 @@ public class NonReentrantLockME implements Lock,java.io.Serializable{
 		return sync.newConditon();
 	}
 	
+	
 	public boolean isLocked() {
 		return sync.isHeldExclusively();
 	}
