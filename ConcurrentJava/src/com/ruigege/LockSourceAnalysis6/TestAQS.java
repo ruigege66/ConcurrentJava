@@ -63,13 +63,17 @@ public class TestAQS {
 			}
 		}
 		
+		
 		// (9)当前线程是该锁持有者
 		else if(current == getExclusiveOwnerThread()) {
 			int nextc = c + acquires;
 			if(nextc<0) {
 				throw new Error("Maximum lock count exceeded");
 			}
+			setState(nextc);
+			return true;
 		}
+		return false;
 	}
 	
 
