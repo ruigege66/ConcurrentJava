@@ -51,5 +51,26 @@ public class TestAQS {
 		}
 	}
 	
+	protected final boolean tryAcuqire(int acquires) {
+		final Thread current = Thread.currentThread();
+		int c = getState();
+		// (7)当前AQS状态值为0
+		if(c == 0) {
+			// (8)公平性策略
+			if(!hasQueuedPredecessors() && compareAndSetState(0,acquires)) {
+				setExclusiveOwnerThread(current);
+				return true;
+			}
+		}
+		
+		// (9)当前线程是该锁持有者
+		else if(current == getExclusiveOwnerThread()) {
+			int nextc = c + acquires;
+			if(nextc<0) {
+				throw new Error("Maximum lock count exceeded");
+			}
+		}
+	}
+	
 
 }
