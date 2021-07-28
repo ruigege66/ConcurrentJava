@@ -54,4 +54,25 @@ public class TestReentrantLock {
 			}
 		}
 	}
+	
+	public void unlock() {
+		sync.release();
+	}
+	
+	public final boolean tryRelease( int releases) {
+		// 如果不是锁持有者，则调用 unlock则抛出异常
+		int c = getState() - releases;
+		if(Thread.currentThread() != getExclusiveOwnerThread()) {
+			throw new IllegalMonitorStateException();
+		}
+		boolean free = false;
+		// 如果当前可重入的次数为0，则清空锁持有线程
+		if(c == 0) {
+			free = true;
+			setExclusiveOwnerThread(null);
+		}
+		// 设置可重入次数为原始值-1
+		setState(c);
+		return free;
+	}
 }
