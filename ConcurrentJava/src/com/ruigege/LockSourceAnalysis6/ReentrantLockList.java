@@ -4,12 +4,19 @@ import java.util.ArrayList;
 
 public static class ReentrantLockList {
 
-	//Ïß³Ì²»°²È«µÄList
+
 	private ArrayList<String> array = new ArrayList<String>();
-	//¶ÀÕ¼Ëø
+	//ç‹¬å é”
 	private volatile ReentrantLock lock = new ReentrantLock();
 	
-	//Ìí¼ÓÔªËØ
+	//æ·»åŠ å…ƒç´ 
+
+	private ArrayList<String> array = new ArrayList<String>();
+	//é™î„€å´°é–¿ï¿½
+	private volatile ReentrantLock lock = new ReentrantLock();
+	
+	//å¨£è¯²å§éå†ªç¤Œ
+
 	public void add(String e) {
 		lock.lock();
 		try {
@@ -18,7 +25,7 @@ public static class ReentrantLockList {
 			lcok.unlock();
 		}
 	}
-	//É¾³ıÔªËØ
+
 	public void remove(String e) {
 		lock.lock();
 		try {
@@ -28,7 +35,7 @@ public static class ReentrantLockList {
 		}
 	}
 	
-	//»ñÈ¡Êı¾İ
+	//è·å–æ•°æ®
 	public String get(int index) {
 		lock.lock();
 		try {

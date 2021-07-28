@@ -8,19 +8,19 @@ public class TestReentrantLock {
 	public static void main(String[] args) {
 		ReentrantLock lock = new ReentrantLock();
 		Condition condition = lock.newCondition();
-		// ConditionÀàÊÇËø¶ÔÓ¦µÄÒ»¸öÌõ¼ş±äÁ¿£¬Ò»¸ölock¶ÔÏóÊÇ¿ÉÒÔ´´½¨¶à¸öÌõ¼ş±äÁ¿µÄ
+		// Conditionç±»æ˜¯é”å¯¹åº”çš„ä¸€ä¸ªæ¡ä»¶å˜é‡ï¼Œä¸€ä¸ªlockå¯¹è±¡æ˜¯å¯ä»¥åˆ›å»ºå¤šä¸ªæ¡ä»¶å˜é‡çš„
 		
-		lock.lock(); // Ê×ÏÈ»ñÈ¡¶ÀÕ¼Ëø
+		lock.lock(); // é¦–å…ˆè·å–ç‹¬å é”
 		try {
 			System.out.println("begin wait");
-			condition.await(); // ×èÈûµ±Ç°Ïß³Ì£¬µ±ÆäËûÏß³Ìµ÷ÓÃÌõ¼ş±äÁ¿µÄsignal·½·¨µÄÊ±ºò£¬±»×èÈûµÄÏß³Ì¾Í»áÕâ
-			// ÕâÀï·Å»Ø£¬ĞèÒª×¢ÒâµÄÊÇºÍµ÷ÓÃObjectµÄwait·½·¨Ò»Ñù£¬Èç¹ûÔÚÃ»ÓĞ»ñÈ¡ËøÖ®Ç°µ÷ÓÃÁË
-			// Ìõ¼ş±äÁ¿µÄawait·½·¨£¬¾Í»áÅ×³öjava.lang.IllegalMonitorStateException
+			condition.await(); // é˜»å¡å½“å‰çº¿ç¨‹ï¼Œå½“å…¶ä»–çº¿ç¨‹è°ƒç”¨æ¡ä»¶å˜é‡çš„signalæ–¹æ³•çš„æ—¶å€™ï¼Œè¢«é˜»å¡çš„çº¿ç¨‹å°±ä¼šè¿™
+			// è¿™é‡Œæ”¾å›ï¼Œéœ€è¦æ³¨æ„çš„æ˜¯å’Œè°ƒç”¨Objectçš„waitæ–¹æ³•ä¸€æ ·ï¼Œå¦‚æœåœ¨æ²¡æœ‰è·å–é”ä¹‹å‰è°ƒç”¨äº†
+			// æ¡ä»¶å˜é‡çš„awaitæ–¹æ³•ï¼Œå°±ä¼šæŠ›å‡ºjava.lang.IllegalMonitorStateException
 			System.out.println("end wait");
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			lock.unlock(); // ÊÍ·ÅÁËËø
+			lock.unlock(); // é‡Šæ”¾äº†é”
 		}
 		
 		lock.lock();
@@ -40,13 +40,13 @@ public class TestReentrantLock {
 		if(Thread.interrupted()) {
 			throw new InterruptedException();
 		}
-		// ´´½¨ĞÂµÄNode½Úµã£¬²¢ÇÒ²åÈëµ½Ìõ¼ş¶ÓÁĞÄ©Î²
+		// åˆ›å»ºæ–°çš„NodeèŠ‚ç‚¹ï¼Œå¹¶ä¸”æ’å…¥åˆ°æ¡ä»¶é˜Ÿåˆ—æœ«å°¾
 		Node node = addContionWaiter();
-		// ÊÍ·Åµ±Ç°Ïß³Ì»ñÈ¡µ½µÄËø
+		// é‡Šæ”¾å½“å‰çº¿ç¨‹è·å–åˆ°çš„é”
 		int savedState = fullyRelease(node);
 		
 		int interruptMode = 0;
-		// µ÷ÓÃpark·½·¨×èÈû¹ÒÆğµ±Ç°Ïß³Ì
+		// è°ƒç”¨parkæ–¹æ³•é˜»å¡æŒ‚èµ·å½“å‰çº¿ç¨‹
 		while(!isOnSyncQueue(node)) {
 			LockSupport.park(this);
 			if((interruprMode = checkInterruptWhileWaiting(node)) != 0) {
@@ -60,18 +60,30 @@ public class TestReentrantLock {
 	}
 	
 	public final boolean tryRelease( int releases) {
+<<<<<<< HEAD
 		// Èç¹û²»ÊÇËø³ÖÓĞÕß£¬Ôòµ÷ÓÃ unlockÔòÅ×³öÒì³£
+=======
+		// å¦‚æœä¸æ˜¯é”æŒæœ‰è€…ï¼Œåˆ™è°ƒç”¨ unlockåˆ™æŠ›å‡ºå¼‚å¸¸
+>>>>>>> b23c3ffa2e0395a62600f8706fa6349217fa2134
 		int c = getState() - releases;
 		if(Thread.currentThread() != getExclusiveOwnerThread()) {
 			throw new IllegalMonitorStateException();
 		}
 		boolean free = false;
+<<<<<<< HEAD
 		// Èç¹ûµ±Ç°¿ÉÖØÈëµÄ´ÎÊıÎª0£¬ÔòÇå¿ÕËø³ÖÓĞÏß³Ì
+=======
+		// å¦‚æœå½“å‰å¯é‡å…¥çš„æ¬¡æ•°ä¸º0ï¼Œåˆ™æ¸…ç©ºé”æŒæœ‰çº¿ç¨‹
+>>>>>>> b23c3ffa2e0395a62600f8706fa6349217fa2134
 		if(c == 0) {
 			free = true;
 			setExclusiveOwnerThread(null);
 		}
+<<<<<<< HEAD
 		// ÉèÖÃ¿ÉÖØÈë´ÎÊıÎªÔ­Ê¼Öµ-1
+=======
+		// è®¾ç½®å¯é‡å…¥æ¬¡æ•°ä¸ºåŸå§‹å€¼-1
+>>>>>>> b23c3ffa2e0395a62600f8706fa6349217fa2134
 		setState(c);
 		return free;
 	}
