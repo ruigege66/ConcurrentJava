@@ -15,6 +15,7 @@ public class ExecutorTest {
 	public static ExecutorService newFixeThreadPool (int nThreads, ThreadFactory threadFactory) {
 		return new ThreadPoolExecutor(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(), threadFactory);
 	}
+	
 
 	
 	public static ExecutorService newSingleThreadExecutor() {
@@ -26,12 +27,12 @@ public class ExecutorTest {
 		return new FinalizableDelegatedExecutorService(new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>()), threadFactory);
 	}
 	
-	public static ExcecutorService newCachedThreadPool() {
+	public static ExecutorService newCachedThreadPool() {
 		return new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L,TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
 	}
 	
 	// 使用自定义的线程工厂
-	public static ExcecutorService newCachedThreadPool(ThreadFactory threadFactory) {
+	public static ExecutorService newCachedThreadPool(ThreadFactory threadFactory) {
 		return new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L,TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), threadFactory);
 	}
 
