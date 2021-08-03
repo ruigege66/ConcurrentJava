@@ -22,6 +22,7 @@ public class ExecutorTest {
 		return new FinalizableDelegatedExecutorService(new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>()));
 	}
 	
+	
 	// 使用自己的工厂
 	public static ExecutorService newSingleThreadExecutor(ThreadFactory threadFactory) {
 		return new FinalizableDelegatedExecutorService(new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>()), threadFactory);
